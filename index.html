@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promises | JSRaiz | Programador a Bordo</title>
+</head>
+<body>
+    <script>
+        /*
+            SINGLE THREAD - é processado linha por linha, executado linha por linha.
+
+            IO não bloqueante - apesar de ler linha por linha, ele não bloqueia seu código
+            ao não ser que você force isso. 
+
+            Assincrona - ex: banco de dados pegar um CEP
+            CEP -> CORREIOS
+            Sai do JavaScript e vai fazer requisição em um banco de dados retornando algo.
+
+            PROMISES - é um objeto JavaScript que te da um conjunto de funcionalidades,
+            para que você possa usa de forma melhor a parte assincrona da linguagem.
+            ex. aguarde o resultado para que retorne algo na página.
+        */
+        /*
+        console.log('Primeiro') // 1 fez a leitura e executou.
+
+        setTimeout(function() {
+            console.log('Segundo') // 2 fez a leitura e jogou numa fila e depois de um segundo executou mas não bloqueou o debaixo.
+        }, 0)
+
+        console.log('Terceiro')  // 3 fez a leitura e executou.
+
+        //Resultado: 'Primeiro', 'Terceiro', ... 1 segundo, 'Segundo'.
+        */
+        
+        // Exemplo 2:
+        /*
+        console.log('Primeiro');
+
+        setTimeout(function(){
+            console.log('Segundo')
+
+        }, 2000);
+
+        console.log('Terceiro');
+
+        setTimeout(function(){
+            console.log('Quarto')
+
+        }, 1000);
+
+        console.log('Quinto');
+        
+        // Resultado: 'Primeiro', Terceiro, Quinto,... 1 seg, 'Segundo', Quarto.
+        */
+        
+
+
+
+
+
+        // Estados da Promise 
+
+            // As promises podem ter 4 estados:
+            // Pendente: É o momento em que faz uma requisição, pois ainda não tem nenhum resultado. O resultado dessa requisição pode ser um Sucesso (Realizada) ou pode ter dado um erro um problema (Rejeitada)
+            // Realizada: Após a pendencia, significa que o request deu certo ou seja Resolvida.
+            // Rejeitada: Após a pendencia, sgnifica que o request deu problema seja, problema de rede, pode ter feito request errado, serviço estava fora do ar, sem internet, etc...
+            // Estabelecida: Resultado final, seja ela realizada ou rejeitada.
+
+        
+
+
+
+        // Como funciona a Fila de processos Assincronos?
+            // Imagina que o código do JS sem ser assincrono como o Caixa de um Super Mercado.
+            // As promises estão em uma fila 'preferencial'
+            // E outras funções como: onClick, setTimeout estão na fila normal.
+            // Ou seja quando a leitura do JS acabar e for começar a ir na fila assincrona, vai chamar primeiro as promises e depois as outras funções.
+            // Mas se a promise não estiver pronta para ser chamada ela passa pra fila normal. ou seja O JS chama primeiro quem esta pronto para se chamado.
+
+
+
+
+        //Exemplo de funções Promise --- PARA COMPREENSÃO ENTENDA ESSE PARA IR PARA O PROXIMO.
+        // OBS: O que vai ser passado aqui não é muito bem utilizada, só em casos especificos, porem para é bom passar por este primeiro.
+
+         //Passando uma função que retorna uma promise ja resolvida: 
+
+        function jaRealizada(){
+	        return Promise.resolve() // O Promise é uma palavra reservada na qual tem o metodo .resolve()
+							 // O .resolve significa que é uma promise ja resolvida.	
+        }
+
+        jaRealizada().then(function(){            // O .then() é um metodo quando a promise é resolvida, sendo ela forçada ou quando da certo.
+	        console.log('Promise Resolvida!')    // Após a promise dar certo printe 'Promise Resolvida'.
+
+        }) // RESULTADO: 'Promise Resolvida!'
+
+
+
+
+
+
+        
+        // Você tambem consegue passar um parametro e mostrar quando der certo: 
+
+        function jaRealizada(){
+	        return Promise.resolve('Alguma Coisa') // O Promise é uma palavra reservada na qual tem o metodo .resolve()
+							               // O .resolve significa que é uma promise ja resolvida	
+        }
+
+        jaRealizada().then(function(parametro){              // O .then() é um metodo quando a promise é resolvida, sendo ela forçada ou quando da certo. O parametro é parametro vindo da func. jaRealizada.
+	        console.log('Promise Resolvida!', parametro)    // Após a promise dar certo printe 'Promise Resolvida' e o parametro que foi passado para o then vindo da função jaRealizada.
+
+        })// RESULTADO: 'Promise Resolvida! Alguma Coisa'
+    </script>
+</body>
+</html>
