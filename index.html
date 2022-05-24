@@ -86,7 +86,7 @@
         // OBS: O que vai ser passado aqui não é muito bem utilizada, só em casos especificos, porem para é bom passar por este primeiro.
 
          //Passando uma função que retorna uma promise ja resolvida: 
-
+        /*
         function jaRealizada(){
 	        return Promise.resolve() // O Promise é uma palavra reservada na qual tem o metodo .resolve()
 							 // O .resolve significa que é uma promise ja resolvida.	
@@ -96,7 +96,7 @@
 	        console.log('Promise Resolvida!')    // Após a promise dar certo printe 'Promise Resolvida'.
 
         }) // RESULTADO: 'Promise Resolvida!'
-
+        */
 
 
 
@@ -104,7 +104,7 @@
 
         
         // Você tambem consegue passar um parametro e mostrar quando der certo: 
-
+        /*
         function jaRealizada(){
 	        return Promise.resolve('Alguma Coisa') // O Promise é uma palavra reservada na qual tem o metodo .resolve()
 							               // O .resolve significa que é uma promise ja resolvida	
@@ -114,6 +114,159 @@
 	        console.log('Promise Resolvida!', parametro)    // Após a promise dar certo printe 'Promise Resolvida' e o parametro que foi passado para o then vindo da função jaRealizada.
 
         })// RESULTADO: 'Promise Resolvida! Alguma Coisa'
+        */
+
+
+
+
+
+        // Passando uma função que retorna uma promise Rejeitada:
+
+        function jaRejeitada(){
+	        return Promise.reject()
+        }
+
+        jaRejeitada().catch(function(){ // Assim como o .then() que é para apenas Promise Resolvida, o .catch é apenas para Promise Rejeitada.
+							            // O .catch() serve para tratar a promise rejeitada.
+	        console.log('Rejeitado!')
+        })
+
+
+        // Forma 'Certa' de trabalhar com Promise ---
+
+        // Uma das formas mais usadas por ai:
+        // Esta função retorna uma Promise que ela aceita  um parametro que é uma função, essa função sua Promise vai gerenciar.
+        // Essa função tem 2 parametros: (resolve, reject) o reject é opcional.
+        // Ensinando a criar promise, mas vc não cria uma promise...
+
+
+        // RESOLVE:
+        /*
+        function promiseTrabalhada(){
+            return new Promise (function(resolve, reject){ // retorna um objeto Promise com os 2 parametros
+            resolve('Olá Progrador RESOLVE!');		   // caso seja resolve printar: Olá Programador RESOLVE!
+            })
+        }
+
+        promiseTrabalhada().then(function(message){       // usando o metodo then() pois se trata de um resolve
+        console.log(message)
+        })
+
+        //REJECT:
+        function promiseTrabalhada(){				      	  
+            return new Promise(function(resolve, reject){ // retorna um objeto Promise com os 2 parametros
+            reject('Olá Progrador REJECT!')           // caso seja um reject vai printar: Olá Programador REJECT.
+        })
+        }
+
+        promiseTrabalhada().catch(function(message){     // usando o catch para tratar esse reject
+        console.log(message)
+
+        })
+        
+        */
+        
+        
+        
+        
+        // Resolve com setTimeout de 1 seg:
+        /*
+        function promiseTrabalhada(){
+        return new Promise (function(resolve, reject){
+            setTimeout(function(){                       // colocando um setTimeout. Depois de 1 segundo o resolve
+			    resolve('Olá Programador!')
+		    }, 800)
+        })
+        }
+
+        promiseTrabalhada().then(function(message){ 		// o then só podera ser chamado quando o resolve estiver pronto ou seja depois de 1 seg.
+        console.log(message)
+
+        })
+        */
+
+
+
+        //Fazendo request usando uma API (fetch) e usando promise:
+
+        // O fectch é uma API do browser que permite fazer requisições
+        // Pois quem faz o request não é o JS. Quem faz o request é uma API do browser, o fetch te permite usar esse recurso no navegador, para fazer a requisição em si.
+        // O interessante é que o fetch ja retorna uma promise.
+        // Invocar o metodo fetch: window.fetch() ou apenas fetch()
+
+        /*
+            window
+                .fetch('https://viacep.com.br/ws/01001000/json/') // Invocando o fetch passando o link do API, porem não retorna o valor do corpo do HTTP, no qual seria o  endereço do usuario, ele traz tudo.
+                .then(function(data){                             // Como o fetch ja retorna uma promise passa-se o .then(). Passando o .then() recebendo uma função como parametro aquilo que o via cep retornou
+                return data.json().then(function (endereco){    // Como o fetch pega tudo da resposta http o .json faz pegar o CORE ali da resposta http, pega apenas o que queria e não o corpo inteiro.
+															// O json é assincrono então ele retorna uma promise como é uma promise tem um .then() passando como parametro somente o que o json pegou.
+															
+                console.log(endereco)						//
+
+                })
+            })
+        */
+
+
+
+
+
+        //Encadeamento de promises:
+
+            // O encadeamento de promise é quando uma promise depende da outra.
+            // Sempre que você tiver uma operação que uma depende da outra você encadeia then.
+            // A promise quando retorna outra promise você pode encadea-las.
+            // Um exemplo básico é: Voce precisa do endereço do cliente: você busca o end. no banco (promise) se der certo (then), usa o via CEP faz uma requisição e espera (promise) se de certo (then) e assim vai...
+            // E o por que? você consegue fazer isso para que uma dependa do resultado da anterior
+ 
+        // - Exemplo usando funções anonimas (não é o certo):
+ 
+		function jaRealizada() {
+            return Promise.resolve('01001000')
+        }
+
+        function jaRejeitada() {
+            return Promise.reject()
+        }
+
+        jaRealizada().then(function (data) {
+            console.log('Promise resolvida', data)
+        })
+
+        jaRejeitada().catch(function () {
+            console.log('REJEITADO!')
+        })
+
+        function promiseTrabalhada() {
+            return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    resolve('Helloworld')
+                }, 1000);
+            })
+        }
+
+        promiseTrabalhada().then(function (message) {
+            console.log(message)
+
+        })
+
+        jaRealizada()
+            .then(function (cep) {
+                return window
+                    .fetch('https://viacep.com.br/ws/01001000/json/')
+            })
+            .then(function (data) {
+                return data.json()
+            })
+            .then(function () {
+                return data.json()
+            })
+            .then(function (endereco) {
+                console.log(endereco)
+            })
+            .catch(function () {
+                console.log('Aconteceu algum erro')
+            })
     </script>
 </body>
 </html>
