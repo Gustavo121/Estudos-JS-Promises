@@ -121,7 +121,7 @@
 
 
         // Passando uma função que retorna uma promise Rejeitada:
-
+        /*
         function jaRejeitada(){
 	        return Promise.reject()
         }
@@ -130,7 +130,7 @@
 							            // O .catch() serve para tratar a promise rejeitada.
 	        console.log('Rejeitado!')
         })
-
+        */
 
         // Forma 'Certa' de trabalhar com Promise ---
 
@@ -220,7 +220,7 @@
             // E o por que? você consegue fazer isso para que uma dependa do resultado da anterior
  
         // - Exemplo usando funções anonimas (não é o certo):
- 
+        /*
 		function jaRealizada() {
             return Promise.resolve('01001000')
         }
@@ -266,6 +266,15 @@
             })
             .catch(function () {
                 console.log('Aconteceu algum erro')
+            })
+        */
+
+        window.fetch('https://viacep.com.br/ws/80010020/json/')
+            .then(function(data) {
+                return data.json().then(function (endereco) {
+
+                    console.log(endereco)
+                })
             })
     </script>
 </body>
