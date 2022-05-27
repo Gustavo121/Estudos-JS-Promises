@@ -268,7 +268,7 @@
                 console.log('Aconteceu algum erro')
             })
         */
-
+        /*
         window.fetch('https://viacep.com.br/ws/80010020/json/')
             .then(function(data) {
                 return data.json().then(function (endereco) {
@@ -276,6 +276,84 @@
                     console.log(endereco)
                 })
             })
+        */
+
+
+        // Apenas as funções:
+        function jaRealizada() {
+            return Promise.resolve('12573338')
+        }
+
+        function pegaCep(cep) {
+            return window
+                .fetch('https://viacep.com.br/ws/'+cep+'/json/')
+        }
+
+        function extraiEndereco(data) {
+            return data.json()
+        }
+
+        function imprimeEndereco(endereco) {
+            console.log(endereco)
+        }
+
+        function trataErro() {
+            console.log('Aconteceu algum erro', erro)
+        }
+
+        // --- Encadeamento (juntando as funções de cima):
+
+        jaRealizada() // a jaRealizada retorna uma promise com o parametro '01001000' que é o cep.
+            .then(pegaCep) // a pegCEP pega o parametro passado na jaRealizada e joga no link do API pra pegar o endereço. Porem ela devolve um HTTP completo
+            .then(extraiEndereco) // o extraiEndereco o json pega o HTTP apenas o body da informação, onde estão as informações
+            .then(imprimeEndereco)  // o imprimeEndereco apenas da um console.log no endereco HTTP (body) pego pelo o json
+            .catch(trataErro) // o trataErro serve caso algum desses thens a cima de problema cai nessse erro.
+
+        // Mostrando o finally 
+            .finally(function() { // o .finally ele sempre será executado independente se deu erro ou não.
+                console.log('Sempre Executa!')
+            })
+
+
+        // Usando o promise.all
+        // promise.all é uma forma de invocar promises só que uma não pode independer da outra
+        // o interessante do é que voce passa um array de promise e quando todas forem resolvidas ai ele retorna um array com todos os valores resolvidos
+
+        Promise.all([ // [] indicando o array
+            pegaCep('01001000'), // promises do array
+            jaRealizada() // promises do array
+            .then(function(promisesResolvida){ // Quando as promises forem resolvidas vai chamar a função do then onde o promisesResolvidas tambem é um array
+                return console.log(promisesResolvida) // Sempre vai retornar o na sequencia das promises de cima, na sequencia em que vc colocou independente do tempo que leve      
+            })
+        ])
+
+
+        function demora500ms() {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve('demora500ms')
+                }, 500);
+            })
+        }
+
+        function demora200ms() {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve('demora200ms')
+                }, 200);
+            })
+        }
+
+        Promise.all([
+            demora200ms(),
+            demora500ms()
+    ])
+        .then(function(promisesResolvidas) {
+            console.log(promisesResolvidas[1])
+        });
+
+
+        Promise.race() // retorna o valor da primeira resolvida apenas ou primeira rejeitada.
     </script>
 </body>
 </html>
